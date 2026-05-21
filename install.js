@@ -15,6 +15,7 @@ module.exports = {
     {
       method: "shell.run",
       params: {
+        bluefairy: "off",
         venv: "env",
         path: "app",
         message: {
