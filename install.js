@@ -24,6 +24,18 @@ module.exports = {
       }
     },
     {
+      when: "{{gpu === 'nvidia' && (platform === 'win32' || platform === 'linux')}}",
+      method: "script.start",
+      params: {
+        uri: "torch.js",
+        params: {
+          venv: "env",
+          path: "app",
+          flashattention: true
+        }
+      }
+    },
+    {
       method: "fs.link",
       params: {
         venv: "app/env"

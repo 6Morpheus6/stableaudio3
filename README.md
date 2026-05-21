@@ -15,6 +15,8 @@ Click **Install** in Pinokio. The installer clones the upstream repository into 
 uv sync --extra ui --active
 ```
 
+On NVIDIA Windows and Linux machines, the installer then runs the launcher `torch.js` helper to replace CPU-only PyTorch with CUDA PyTorch and install a matching prebuilt Flash Attention wheel. macOS and CPU-only installs keep the upstream `uv sync` route unchanged.
+
 The launcher uses public Hugging Face mirrors, so it does not prompt for `HF_TOKEN`. The first launch downloads the selected model and its T5Gemma text encoder files into the normal Hugging Face cache. Later launches reuse the cached files.
 
 ## Use
@@ -24,6 +26,8 @@ After installation:
 1. Click **Start Music** for `small-music` from `cocktailpeanut/stable-audio-3-small-music`.
 2. Click **Start SFX** for `small-sfx` from `cocktailpeanut/stable-audio-3-small-sfx`.
 3. Pinokio opens **Open Web UI** when Gradio prints the local URL.
+
+The launcher disables Gradio public share links, so startup should only expose the local `127.0.0.1` Web UI.
 
 Generated files are returned through the Gradio UI. The upstream interface also supports text-to-audio, init-audio editing, inpainting, continuation, LoRA loading at launch, and output format controls.
 

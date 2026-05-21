@@ -26,7 +26,20 @@ def register_mirrors():
     model_module.all_models = model_configs.all_models
 
 
+def disable_gradio_share_links():
+    import gradio.blocks
+
+    original_launch = gradio.blocks.Blocks.launch
+
+    def launch_without_share(self, *args, **kwargs):
+        kwargs["share"] = False
+        return original_launch(self, *args, **kwargs)
+
+    gradio.blocks.Blocks.launch = launch_without_share
+
+
 if __name__ == "__main__":
     register_mirrors()
+    disable_gradio_share_links()
     sys.argv[0] = "run_gradio.py"
     runpy.run_path("run_gradio.py", run_name="__main__")
