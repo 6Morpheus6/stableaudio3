@@ -1,0 +1,93 @@
+const path = require('path')
+
+module.exports = {
+  version: "7.0",
+  title: "Stable Audio 3 Small",
+  description: "Low-memory launcher for Stable Audio 3 Small Music and Small SFX using public cocktailpeanut Hugging Face mirrors. Medium is intentionally not included. https://github.com/Stability-AI/stable-audio-3",
+  icon: "icon.png",
+  menu: async (kernel) => {
+    let installing = await kernel.running(__dirname, "install.js")
+    let installed = await kernel.exists(__dirname, "app", "env")
+    let running = await kernel.running(__dirname, "start.js")
+
+    if (installing) {
+      return [{
+        default: true,
+        icon: "fa-solid fa-plug",
+        text: "Installing",
+        href: "install.js"
+      }]
+    } else if (installed) {
+      if (running) {
+        let local = kernel.memory.local[path.resolve(__dirname, "start.js")]
+        if (local) {
+          if (!local.url) {
+            return [{
+              default: true,
+              icon: "fa-solid fa-terminal",
+              text: "Terminal",
+              href: "start.js"
+            }]
+          }
+          return [{
+            default: true,
+            icon: "fa-solid fa-rocket",
+            text: "Open Web UI",
+            href: local.url
+          }, {
+            icon: "fa-solid fa-terminal",
+            text: "Terminal",
+            href: "start.js"
+          }]
+        } else {
+          return [{
+            default: true,
+            icon: "fa-solid fa-terminal",
+            text: "Terminal",
+            href: "start.js"
+          }]
+        }
+      } else {
+        return [{
+          default: true,
+          icon: "fa-solid fa-music",
+          text: "Start Music",
+          href: "start.js",
+          params: {
+            model: "small-music",
+            title: "Stable Audio 3 Small Music",
+            prompt: "lo-fi hip hop beat, 90 BPM"
+          }
+        }, {
+          icon: "fa-solid fa-wave-square",
+          text: "Start SFX",
+          href: "start.js",
+          params: {
+            model: "small-sfx",
+            title: "Stable Audio 3 Small SFX",
+            prompt: "cinematic whoosh impact"
+          }
+        }, {
+          icon: "fa-solid fa-plug",
+          text: "Update",
+          href: "update.js"
+        }, {
+          icon: "fa-solid fa-plug",
+          text: "Install",
+          href: "install.js"
+        }, {
+          icon: "fa-regular fa-circle-xmark",
+          text: "Reset",
+          href: "reset.js"
+        }]
+      }
+    } else {
+      return [{
+        default: true,
+        icon: "fa-solid fa-plug",
+        text: "Install",
+        href: "install.js"
+      }]
+    }
+  }
+}
